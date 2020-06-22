@@ -1,0 +1,30 @@
+{
+  "name": "nissan-owner-s-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eleonkov/Nissan-Owner-s-Bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eleonkov/Nissan-Owner-s-Bot/issues"
+  },
+  "homepage": "https://github.com/eleonkov/Nissan-Owner-s-Bot#readme",
+  "devDependencies": {
+    "node-fetch": "^2.6.0"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "fs": "0.0.1-security",
+    "get-video-duration": "^1.0.3",
+    "moment": "^2.26.0",
+    "node-cron": "^2.0.3",
+    "telegraf": "^3.36.0"
+  }
+}
