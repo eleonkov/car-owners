@@ -42,3 +42,15 @@ img {
     top: 5px;
     background-image: url(https://www.instagram.com/static/bundles/es6/sprite_mediatypes_65c15d7731ea.png/65c15d7731ea.png);
 }
+
+
+span {
+	position: absolute;
+    left: 0;
+    top: 0;
+    background: #fff;
+    padding: 5px 10px;
+    font-size: 15px;
+    font-family: 'Montserrat', sans-serif;
+    border-bottom-right-radius: 10px;
+}

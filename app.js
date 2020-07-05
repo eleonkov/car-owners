@@ -26,16 +26,16 @@ const carAppInit = async () => {
 
     const getContent = (posts) => {
         return posts.reduce((acc, post) => {
-            let { shortcode, thumbnail_src, __typename: typename } = post.node;
+            let { shortcode, thumbnail_src, edge_liked_by, __typename: typename } = post.node;
 
             if (typename === 'GraphVideo' && util.isFresh(post, db[CAR].lastUpdate)) {
-                acc.push({ shortcode, thumbnail_src, typename });
+                acc.push({ shortcode, thumbnail_src, typename, edge_liked_by });
 
                 return acc;
             }
 
             if (util.isGoodFormat(post) && util.isFresh(post, db[CAR].lastUpdate)) {
-                acc.push({ shortcode, thumbnail_src, typename });
+                acc.push({ shortcode, thumbnail_src, typename, edge_liked_by });
 
                 return acc;
             }
