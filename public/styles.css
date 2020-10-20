@@ -54,3 +54,7 @@ span {
     font-family: 'Montserrat', sans-serif;
     border-bottom-right-radius: 10px;
 }
+
+h1 {
+    font-family: 'Montserrat';
+}
