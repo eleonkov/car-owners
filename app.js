@@ -20,16 +20,16 @@ const carAppInit = async () => {
 
     const getResource = async (url) => {
         const res = await fetch('https://www.instagram.com/' + url);
-        if (!res.ok) throw new Error(`Could not fetch ${url}, received ${res.status}`);
+        if (!res.ok) return null;
         return await res.json();
     };
 
     const getContent = (posts) => {
         return posts.reduce((acc, post) => {
-            let { shortcode, thumbnail_src, edge_liked_by, __typename: typename } = post.node;
+            let { shortcode, thumbnail_src, dimensions, edge_liked_by, __typename: typename } = post.node;
 
             if (typename === 'GraphVideo' && util.isFresh(post, db[CAR].lastUpdate)) {
-                acc.push({ shortcode, thumbnail_src, typename, edge_liked_by });
+                acc.push({ shortcode, thumbnail_src, typename, edge_liked_by, isReels: util.isReels(dimensions) });
 
                 return acc;
             }
@@ -49,11 +49,18 @@ const carAppInit = async () => {
 
         for (let owner of db[CAR].owners) {
             const res = await getResource(`${owner}/?__a=1`);
-            const shortcodeList = getContent(res.graphql.user.edge_owner_to_timeline_media.edges);
-            if (shortcodeList.length !== 0) {
-                tmpShortcodeList = [...tmpShortcodeList, ...shortcodeList];
-            };
-            console.log(`${owner} (${shortcodeList.length})`);
+
+            if (res) {
+                const shortcodeList = getContent(res.graphql.user.edge_owner_to_timeline_media.edges);
+                if (shortcodeList.length !== 0) {
+                    tmpShortcodeList = [...tmpShortcodeList, ...shortcodeList];
+                };
+
+                console.log(`${owner} (${shortcodeList.length})`);
+            } else {
+                console.log(`User not found: ${owner}`);
+            }
+
             await sleep(getRandomArbitrary(1000, 5000));
         };
 
