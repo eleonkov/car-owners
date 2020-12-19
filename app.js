@@ -18,24 +18,27 @@ const carAppInit = async () => {
 
     const getRandomArbitrary = (min, max) => Math.random() * (max - min) + min;
 
+
     const getResource = async (url) => {
         const res = await fetch('https://www.instagram.com/' + url);
+
         if (!res.ok) return null;
+
         return await res.json();
     };
 
     const getContent = (posts) => {
         return posts.reduce((acc, post) => {
-            let { shortcode, thumbnail_src, dimensions, edge_liked_by, __typename: typename } = post.node;
+            let { shortcode, thumbnail_src, dimensions, edge_liked_by, edge_media_to_comment, __typename: typename } = post.node;
 
             if (typename === 'GraphVideo' && util.isFresh(post, db[CAR].lastUpdate)) {
-                acc.push({ shortcode, thumbnail_src, typename, edge_liked_by, isReels: util.isReels(dimensions) });
+                acc.push({ shortcode, thumbnail_src, typename, edge_liked_by, edge_media_to_comment, isReels: util.isReels(dimensions) });
 
                 return acc;
             }
 
             if (util.isGoodFormat(post) && util.isFresh(post, db[CAR].lastUpdate)) {
-                acc.push({ shortcode, thumbnail_src, typename, edge_liked_by });
+                acc.push({ shortcode, thumbnail_src, typename, edge_liked_by, edge_media_to_comment });
 
                 return acc;
             }
@@ -49,9 +52,9 @@ const carAppInit = async () => {
 
         for (let owner of db[CAR].owners) {
             const res = await getResource(`${owner}/?__a=1`);
-
             if (res) {
                 const shortcodeList = getContent(res.graphql.user.edge_owner_to_timeline_media.edges);
+
                 if (shortcodeList.length !== 0) {
                     tmpShortcodeList = [...tmpShortcodeList, ...shortcodeList];
                 };
@@ -73,7 +76,7 @@ const carAppInit = async () => {
         if (err) throw err;
         db[CAR].lastUpdate = moment().unix();
 
-        fs.writeFile('./data/db.json',  JSON.stringify(db), (err) => {
+        fs.writeFile('./data/db.json', JSON.stringify(db), (err) => {
             if (err) throw err;
             console.log('Done!');
         });

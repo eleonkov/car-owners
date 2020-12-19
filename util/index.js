@@ -43,6 +43,7 @@ const getGridPost = (sortedContent) => {
 
 const getView = (content) => {
     const sortedContent = content.sort((a, b) => b.edge_liked_by.count - a.edge_liked_by.count);
+    const sortedByComents = content.sort((a, b) => b.edge_media_to_comment.count - a.edge_media_to_comment.count);
 
     const getPosts = getGridPost(sortedContent);
 
@@ -51,10 +52,23 @@ const getView = (content) => {
     const GraphSidecarList = getPosts('GraphSidecar');
     const graphImageList = getPosts('GraphImage');
 
+    sortedByComents.length = 30;
+
+    const comment = sortedByComents.map((post) => (`
+    <div class="grid-item ${post.typename}">
+        <span>❤ ${post.edge_media_to_comment.count}</span>
+        <a target="_blank" href="https://www.instagram.com/p/${post.shortcode}/">
+            <img src=${post.thumbnail_src} />
+        </a>
+    </div>
+`)).join('');
+
     return `<html>
         <head><link rel="stylesheet" href="./styles.css">
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet"></head>
         <body>
+            <h1 style="font-family: 'Montserrat';">30 коменнтируемых</h1>
+            <div class="grid-container">${comment}</div>
             <h1 style="font-family: 'Montserrat';">Graph Reels</h1>
             <div class="grid-container">${graphReelsList}</div>
             <h1 style="font-family: 'Montserrat';">Graph Video</h1>
