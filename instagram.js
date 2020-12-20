@@ -13,7 +13,7 @@ module.exports = class Instagram {
   constructor(csrfToken, sessionId) {
     this.csrfToken = csrfToken
     this.sessionId = sessionId
-    this.userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'
+    this.userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'
     this.userIdFollowers = {};
     this.timeoutForCounter = 250
     this.timeoutForCounterValue = 20000
@@ -69,6 +69,8 @@ module.exports = class Instagram {
     if (!isHTML){
       var keys = Object.keys(this.essentialValues)
 
+        console.log(src);
+
         for (var i = 0; i < keys.length; i++){
           var key = keys[i];
           if (!this.essentialValues[key])
@@ -107,23 +109,27 @@ module.exports = class Instagram {
       'headers':
         this.combineWithBaseHeader(
           {
-            'accept': 'text/html,application/xhtml+xml,application/xml;q0.9,image/webp,image/apng,*.*;q=0.8',
+            'content-type': 'application/json',
+            // 'accept': 'text/html,application/xhtml+xml,application/xml;q0.9,image/webp,image/apng,*.*;q=0.8',
             'accept-encoding': 'gzip, deflate, br',
             'cookie': this.generateCookie()
           }
         )
     }
     
-    return fetch('https://www.instagram.com/' + username, fetch_data).then(res => res.text().then(function (data) {  
-      const regex = /window\._sharedData = (.*);<\/script>/;
-      const match = regex.exec(data);
+    return fetch('https://www.instagram.com/' + username + '?__a=1', fetch_data).then(res => res.json().then(function (data) {  
+    //   const regex = /window\._sharedData = (.*);<\/script>/;
+    //   const match = regex.exec(data);
      
-      if (!match || (match && typeof match[1] === 'undefined')) {
-        return '';
-      }
-     
-      return JSON.parse(match[1]).entry_data.ProfilePage[0];
-    }))
+    //   if (!match || (match && typeof match[1] === 'undefined')) {
+    //     return '';
+    //   }
+
+    return data;
+    //   return JSON.parse(match[1]).entry_data.ProfilePage[0];
+    })).catch(e => {
+        console.log(e.message);
+    })
   }
 
   /**
@@ -264,7 +270,7 @@ module.exports = class Instagram {
     * @return {Object} Promise
   */
  auth(username, password) {
-  var formdata = 'username=' + username + '&password=' + password + '&queryParams=%7B%7D'
+  var formdata = 'username=' + username + '&password=' + password + '&queryParams=%7B%7D' + '&optIntoOneTap=false'
 
   var options = {
     method  : 'POST',
@@ -286,7 +292,6 @@ module.exports = class Instagram {
 
   return fetch('https://www.instagram.com/accounts/login/ajax/', options).then(
     t => {
-        console.log(t);
       this.updateEssentialValues(t.headers.get('set-cookie'))
       return this.essentialValues.sessionid;
     }).catch(() =>
