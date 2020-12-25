@@ -41,24 +41,15 @@ const getGridPost = (sortedContent) => {
     }
 }
 
-const getView = (content) => {
-    const sortedContent = content.sort((a, b) => b.edge_liked_by.count - a.edge_liked_by.count);
-    const sortedByComents = content.sort((a, b) => b.edge_media_to_comment.count - a.edge_media_to_comment.count);
+const getView = (sharedData) => {
 
-    const getPosts = getGridPost(sortedContent);
+    const sortedByComents = sharedData.sort((a, b) => b.insight.comments - a.insight.comments);
 
-    const graphReelsList = getReels(sortedContent);
-    const graphVideoList = getPosts('GraphVideo');
-    const GraphSidecarList = getPosts('GraphSidecar');
-    const graphImageList = getPosts('GraphImage');
-
-    sortedByComents.length = 30;
-
-    const comment = sortedByComents.map((post) => (`
+    const comments = sortedByComents.map((post) => (`
     <div class="grid-item ${post.typename}">
-        <span>❤ ${post.edge_media_to_comment.count}</span>
+        <span>❤ ${post.insight.likes}</span>
         <a target="_blank" href="https://www.instagram.com/p/${post.shortcode}/">
-            <img src=${post.thumbnail_src} />
+            <img src=${post.thumbnail} />
         </a>
     </div>
 `)).join('');
@@ -67,16 +58,9 @@ const getView = (content) => {
         <head><link rel="stylesheet" href="./styles.css">
 		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet"></head>
         <body>
-            <h1 style="font-family: 'Montserrat';">30 коменнтируемых</h1>
-            <div class="grid-container">${comment}</div>
-            <h1 style="font-family: 'Montserrat';">Graph Reels</h1>
-            <div class="grid-container">${graphReelsList}</div>
-            <h1 style="font-family: 'Montserrat';">Graph Video</h1>
-            <div class="grid-container">${graphVideoList}</div>
-            <h1 style="font-family: 'Montserrat';">Graph Sidecar</h1>
-            <div class="grid-container">${GraphSidecarList}</div>
-            <h1 style="font-family: 'Montserrat';">Graph Image</h1>
-            <div class="grid-container">${graphImageList}</div>
+            <h1 style="font-family: 'Montserrat';">Top comments</h1>
+            <div class="grid-container">${comments}</div>
+          
         </body>
     </html>`;
 }
@@ -84,4 +68,4 @@ const getView = (content) => {
 exports.getView = getView;
 exports.isGoodFormat = isGoodFormat;
 exports.isFresh = isFresh;
-exports.isReels = isReels;
+exports.isReels = isReels
