@@ -13,6 +13,7 @@ const view = (data) => `<!DOCTYPE html><html><head><meta charset="utf-8"/></head
 (async () => {
     const instagram = new Instagram();
     instagram.lastUpdate = db[process.env.CAR].lastUpdate;
+
     let sharedData = [];
 
     for (const userName of db[process.env.CAR].owners) {

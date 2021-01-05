@@ -49,7 +49,7 @@ module.exports = class Instagram {
       .then((data) => {
         const edges = data.graphql.user.edge_owner_to_timeline_media.edges;
 
-        return edges.filter((edge) => !this.isFreshEdge(edge) || !this.isGoodFormat(edge))
+        return edges.filter((edge) => this.isFreshEdge(edge) && this.isGoodFormat(edge))
           .map(edge => this.updateUserEdge(edge));
       })
       .catch(e => {
