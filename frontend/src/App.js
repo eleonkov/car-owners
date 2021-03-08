@@ -39,19 +39,19 @@ const App = () => {
       </TabList>
       <TabPanel>
         <h2>Reels</h2>
-        {renderContentCard("Reels", "comments")}
+        {renderContentCard("Reels", "likes")}
       </TabPanel>
       <TabPanel>
         <h2>Video</h2>
-        {renderContentCard("GraphVideo", "comments")}
+        {renderContentCard("GraphVideo", "views")}
       </TabPanel>
       <TabPanel>
         <h2>Sidecar</h2>
-        {renderContentCard("GraphSidecar", "comments")}
+        {renderContentCard("GraphSidecar", "likes")}
       </TabPanel>
       <TabPanel>
         <h2>Image</h2>
-        {renderContentCard("GraphImage", "comments")}
+        {renderContentCard("GraphImage", "likes")}
       </TabPanel>
     </Tabs>
   )

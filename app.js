@@ -21,10 +21,11 @@ const view = (data) => `<!DOCTYPE html><html><head><meta charset="utf-8"/></head
         if (!userData) {
             console.log(`User: ${userName}. Information has not been received.`);
         } else {
+            console.log(`User: ${userName}. Information has been received.`);
             sharedData = [...sharedData, ...userData];
         }
         
-        await new Promise((resolve) => setTimeout(resolve, 4000));
+        await new Promise((resolve) => setTimeout(resolve, 6453));
     }
 
     fs.writeFile(`./frontend/public/index.html`, view(JSON.stringify(sharedData)), (err) => {
