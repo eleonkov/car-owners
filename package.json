@@ -20,6 +20,7 @@
     "node-fetch": "^2.6.0"
   },
   "dependencies": {
+    "cors-anywhere": "^0.4.4",
     "dotenv": "^8.2.0",
     "form-data": "^3.0.0",
     "fs": "0.0.1-security",
