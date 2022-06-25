@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/eleonkov/Nissan-Owner-s-Bot#readme",
   "devDependencies": {
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.7"
   },
   "dependencies": {
     "cors-anywhere": "^0.4.4",
